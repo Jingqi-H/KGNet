@@ -1,0 +1,78 @@
+project:
+  version: 1.0
+  active_config: config1
+  root_path: &path_root 'PyCharmCode/4_project/paper/'
+
+
+data_path:
+  setting:
+    use_index: 0       # 分别是88 60 59 44
+  path_list:
+    image_folder:
+      - 'PyCharmCode/data/ACA/img'
+      - 'PyCharmCode/1_dataset/1_glaucoma/v14/classification_data/img/objective_img'
+      - 'PyCharmCode/linshi/v14/classification_data/img/objective_img'
+      - 'PyCharmCode/1_dataset/1_glaucoma/v14/classification_data/img/objective_img'
+    mask_folder:
+      - 'PyCharmCode/data/ACA/seg_mask/obj_mask_v3.1'
+      - 'PyCharmCode/1_dataset/1_glaucoma/v14/classification_data/seg_mask/obj_mask_v3.1'
+      - 'PyCharmCode/linshi/v14/classification_data/seg_mask/obj_mask_v3.1'
+      - 'PyCharmCode/1_dataset/1_glaucoma/v14/classification_data/seg_mask/obj_mask_v3.1'
+    model_path:
+      - 'PyCharmCode/project/pretrained_model/resnet50-pre.pth'
+      - 'PyCharmCode/4_project/frequently_used/pretrained_model/resnet50-pre.pth'
+      - 'PyCharmCode/linshi/pretrained_model/resnet50-pre.pth'
+      - 'PyCharmCode/pretrained_model/resnet50-pre.pth'
+    continue_modle_path: 'PyCharmCode/project/KGNet/results/KGNet_test/best/model/K1EP50.pth'
+
+train:
+  stop_lr_decay: 300
+  loss:
+    loss_type_index: 2
+  #    seg_loss_list:
+  #      - 'CELoss'
+  #      - 'LovaszLoss'
+  #      - 'MultiDiceLoss'
+  #      - 'CELoss+DiceLoss'
+  model:
+    continue_my_model: False
+    embedding_dim: 2
+    pre_trained: True  # True False
+
+---
+project:
+  config_name: config1
+
+superparameter:
+  save_name: 'today'
+  static:
+    num_instance: 5
+    num_classes: 5
+    seed: 42
+    k_fold: 5
+    batch_size: 4
+  train:
+    max_epoch: 2
+    learning_rate: 1e-3
+    img_height: 128
+    img_width: 256
+  pseudo:
+    start_pseudo_epoch: 200
+    tau_n: 0.3
+    kappa_n: 0.005
+    tau_p: 0.7
+    kappa_p: 0.05
+  networks:
+    delta_v: 0.0001
+    delta_d: 1.0
+    final_dim: 8
+  loss:
+    loss_p:
+      p_cla: 1.0
+      p_seg: 1.0
+      p_disc: 1.0
+      p_attri: 0.5
+    disc_loss_p:
+      p_var: 1.0
+      p_dist: 1.0
+      p_reg: 0.01
